@@ -61,3 +61,11 @@ For folders, the size and mimetype are null.
     	"parent": "06a154e3-4014-4a55-adfa-5e55040fae2d"
     }
 
+## Running Locally
+
+Assuming you are running Kafka on the same machine as this project, do this:
+
+1. From $KAFKA_HOME, run `bin/zookeeper-server-start.sh config/zkeeper.properties`
+2. From $KAFKA_HOME, run `bin/kafka-server-start.sh config/server.properties`
+3. From this project's root directory, run `mvn clean install alfresco:run`
+4. If you want to watch the messages as they are sent to Kafka, then from $KAFKA_HOME, run `bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic alfresco-node-events --from-beginning`
