@@ -5,6 +5,8 @@ import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.site.SiteInfo;
+import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.namespace.QName;
 import org.apache.log4j.Logger;
 
@@ -18,9 +20,14 @@ import static org.alfresco.model.ContentModel.*;
  * Created by jpotts, Metaversant on 6/9/17.
  */
 public class NodeRefToNodeEvent {
-    private static Logger logger = Logger.getLogger(NodeRefToNodeEvent.class);
+    private Logger logger = Logger.getLogger(NodeRefToNodeEvent.class);
 
-    public static NodeEvent transform(NodeService nodeService, ContentService contentService, NodeRef nodeRef) {
+    // Dependencies
+    private ContentService contentService;
+    private NodeService nodeService;
+    private SiteService siteService;
+
+    public NodeEvent transform(NodeRef nodeRef) {
         Map<QName, Serializable> props = nodeService.getProperties(nodeRef);
         NodeEvent nodeEvent = NodeEvent.builder()
                 .nodeRef(nodeRef.getId())
@@ -32,6 +39,12 @@ public class NodeRefToNodeEvent {
                 .parent(nodeService.getPrimaryParent(nodeRef).getParentRef().getId())
                 .contentType(nodeService.getType(nodeRef).toPrefixString())
                 .build();
+
+        // If this node is in a site, add the site ID to the event
+        SiteInfo siteInfo = siteService.getSite(nodeRef);
+        if (siteInfo != null) {
+            nodeEvent.setSiteId(siteInfo.getShortName());
+        }
 
         // If this is a content object, set the mimetype and size props
         if (props.get(PROP_CONTENT) != null) {
@@ -49,5 +62,17 @@ public class NodeRefToNodeEvent {
         }
 
         return nodeEvent;
+    }
+
+    public void setContentService(ContentService contentService) {
+        this.contentService = contentService;
+    }
+
+    public void setNodeService(NodeService nodeService) {
+        this.nodeService = nodeService;
+    }
+
+    public void setSiteService(SiteService siteService) {
+        this.siteService = siteService;
     }
 }

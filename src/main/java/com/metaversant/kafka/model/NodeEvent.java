@@ -31,6 +31,7 @@ public class NodeEvent {
     private String modifier;
     private String mimetype;
     private String contentType;
+    private String siteId;
     private Long size;
     private String parent;
 }

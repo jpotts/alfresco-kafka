@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.metaversant.kafka.behavior.GenerateNodeEvent;
 import com.metaversant.kafka.model.NodeEvent;
+import com.metaversant.kafka.transform.NodeRefToNodeEvent;
+import org.alfresco.service.cmr.repository.NodeRef;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.log4j.Logger;
@@ -15,6 +17,9 @@ import java.util.Properties;
  * Created by jpotts, Metaversant on 6/9/17.
  */
 public class MessageService {
+
+    // Dependencies
+    NodeRefToNodeEvent nodeTransformer;
 
     // Settings
     private String topic = "alfresco-node-events";
@@ -31,7 +36,19 @@ public class MessageService {
         producer = new KafkaProducer<>(createProducerConfig());
     }
 
-    public void publish(NodeEvent event) {
+    public void ping(NodeRef nodeRef) {
+        NodeEvent e = nodeTransformer.transform(nodeRef);
+        e.setEventType(NodeEvent.EventType.PING);
+        publish(e);
+    }
+
+    public void publish(NodeRef nodeRef, NodeEvent.EventType eventType) {
+        NodeEvent e = nodeTransformer.transform(nodeRef);
+        e.setEventType(eventType);
+        publish(e);
+    }
+
+    private void publish(NodeEvent event) {
         try {
             final String message = mapper.writeValueAsString(event);
 
@@ -64,5 +81,9 @@ public class MessageService {
 
     public void setBootstrapServers(String bootstrapServers) {
         this.bootstrapServers = bootstrapServers;
+    }
+
+    public void setNodeTransformer(NodeRefToNodeEvent nodeTransformer) {
+        this.nodeTransformer = nodeTransformer;
     }
 }

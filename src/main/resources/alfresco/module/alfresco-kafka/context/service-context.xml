@@ -20,9 +20,24 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
+    <bean id="${project.artifactId}_NodeTransformer" class="com.metaversant.kafka.transform.NodeRefToNodeEvent">
+        <property name="nodeService">
+            <ref bean="NodeService" />
+        </property>
+        <property name="contentService">
+            <ref bean="ContentService" />
+        </property>
+        <property name="siteService">
+            <ref bean="SiteService" />
+        </property>
+    </bean>
+
     <bean id="${project.artifactId}_MessageService" class="com.metaversant.kafka.service.MessageService">
-        <property name="topic" value="alfresco-node-events" />
-        <property name="bootstrapServers" value="localhost:9092" />
+        <property name="topic" value="${kafka.topic}" />
+        <property name="bootstrapServers" value="${kafka.server}" />
+        <property name="nodeTransformer">
+            <ref bean="${project.artifactId}_NodeTransformer" />
+        </property>
     </bean>
 
     <bean id="${project.artifactId}_GenerateNodeEvent" class="com.metaversant.kafka.behavior.GenerateNodeEvent" init-method="init">
@@ -32,9 +47,13 @@
         <property name="policyComponent">
             <ref bean="policyComponent" />
         </property>
-        <property name="contentService">
-            <ref bean="ContentService" />
+        <property name="messageService">
+            <ref bean="${project.artifactId}_MessageService" />
         </property>
+    </bean>
+
+    <bean class="com.metaversant.kafka.service.MessageServiceScopedObject" parent="baseJavaScriptExtension">
+        <property name="extensionName" value="messageService" />
         <property name="messageService">
             <ref bean="${project.artifactId}_MessageService" />
         </property>

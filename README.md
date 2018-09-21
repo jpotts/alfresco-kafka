@@ -17,7 +17,10 @@ There are two configurable settings:
 * Topic: Set the topic that the events should be published to. (Default: alfresco-node-events)
 * Bootstrap Servers: Set the Kafka servers to publish to. (Default: localhost:9092)
 
-Both of these settings are in the AMPs service-context.xml Spring config file. (TODO: Move these settings to a-g.p.)
+Both of these settings can be configured by setting the following in alfresco-global.properties:
+
+    kafka.topic=alfresco-node-events
+    kafka.server=localhost:9092
 
 ## Example
 
@@ -41,6 +44,7 @@ Here is what an event looks like:
         "modifier": "admin",
         "mimetype": "text/plain",
         "contentType": "content",
+        "siteId": "test-site-1",
         "size": 128,
         "parent": "06a154e3-4014-4a55-adfa-5e55040fae2d"
 	}
@@ -57,6 +61,7 @@ For folders, the size and mimetype are null.
     	"modifier": "admin",
     	"mimetype": null,
     	"contentType": "folder",
+        "siteId": "test-site-1",
     	"size": null,
     	"parent": "06a154e3-4014-4a55-adfa-5e55040fae2d"
     }

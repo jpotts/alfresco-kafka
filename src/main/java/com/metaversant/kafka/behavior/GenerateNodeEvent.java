@@ -27,7 +27,7 @@ public class GenerateNodeEvent implements
     // Dependencies
     private NodeService nodeService;
     private PolicyComponent policyComponent;
-    private ContentService contentService;
+
     private MessageService messageService;
 
     // Behaviours
@@ -68,10 +68,7 @@ public class GenerateNodeEvent implements
         if (logger.isDebugEnabled()) logger.debug("Inside onCreateNode");
         NodeRef nodeRef = childAssocRef.getChildRef();
         if (nodeService.exists(nodeRef)) {
-            NodeEvent e = NodeRefToNodeEvent.transform(nodeService, contentService, nodeRef);
-            if (logger.isDebugEnabled()) logger.debug("Back from transform");
-            e.setEventType(NodeEvent.EventType.CREATE);
-            messageService.publish(e);
+            messageService.publish(nodeRef, NodeEvent.EventType.CREATE);
         }
     }
 
@@ -79,9 +76,7 @@ public class GenerateNodeEvent implements
     public void beforeDeleteNode(NodeRef nodeRef) {
         if (logger.isDebugEnabled()) logger.debug("Inside onDeleteNode");
         if (nodeService.exists(nodeRef)) {
-            NodeEvent e = NodeRefToNodeEvent.transform(nodeService, contentService, nodeRef);
-            e.setEventType(NodeEvent.EventType.DELETE);
-            messageService.publish(e);
+            messageService.publish(nodeRef, NodeEvent.EventType.DELETE);
         }
     }
 
@@ -89,9 +84,7 @@ public class GenerateNodeEvent implements
     public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> beforeProps, Map<QName, Serializable> afterProps) {
         if (logger.isDebugEnabled()) logger.debug("Inside onUpdateProperties");
         if (nodeService.exists(nodeRef)) {
-            NodeEvent e = NodeRefToNodeEvent.transform(nodeService, contentService, nodeRef);
-            e.setEventType(NodeEvent.EventType.UPDATE);
-            messageService.publish(e);
+            messageService.publish(nodeRef, NodeEvent.EventType.UPDATE);
         }
     }
 
@@ -109,10 +102,6 @@ public class GenerateNodeEvent implements
 
     public void setPolicyComponent(PolicyComponent policyComponent) {
         this.policyComponent = policyComponent;
-    }
-
-    public void setContentService(ContentService contentService) {
-        this.contentService = contentService;
     }
 
     public void setMessageService(MessageService messageService) {
