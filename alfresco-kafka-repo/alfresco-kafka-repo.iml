@@ -2,20 +2,7 @@
 <module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="Spring" name="Spring">
-      <configuration>
-        <fileset id="fileset" name="Spring Application Context" removed="false">
-          <file>file://$MODULE_DIR$/src/main/resources/alfresco/module/alfresco-kafka/context/bootstrap-context.xml</file>
-          <file>file://$MODULE_DIR$/src/main/resources/alfresco/module/alfresco-kafka/module-context.xml</file>
-          <file>file://$MODULE_DIR$/alf_data_dev/solr/conf/opencmis-qnamefilter-context.xml</file>
-          <file>file://$MODULE_DIR$/src/main/resources/alfresco/module/alfresco-kafka/context/service-context.xml</file>
-          <file>jar://$MAVEN_REPOSITORY$/org/alfresco/alfresco-repository/5.2.g/alfresco-repository-5.2.g.jar!/alfresco/public-services-context.xml</file>
-          <file>jar://$MAVEN_REPOSITORY$/org/alfresco/alfresco-repository/5.2.g/alfresco-repository-5.2.g.jar!/alfresco/site-services-context.xml</file>
-          <file>jar://$MAVEN_REPOSITORY$/org/alfresco/alfresco-repository/5.2.g/alfresco-repository-5.2.g.jar!/alfresco/public-services-security-context.xml</file>
-          <file>jar://$MAVEN_REPOSITORY$/org/alfresco/alfresco-repository/5.2.g/alfresco-repository-5.2.g.jar!/alfresco/policy-context.xml</file>
-          <file>jar://$MAVEN_REPOSITORY$/org/alfresco/alfresco-repository/5.2.g/alfresco-repository-5.2.g.jar!/alfresco/script-services-context.xml</file>
-          <file>jar://$MAVEN_REPOSITORY$/org/alfresco/alfresco-repository/5.2.g/alfresco-repository-5.2.g.jar!/alfresco/bootstrap-context.xml</file>
-        </fileset>
-      </configuration>
+      <configuration />
     </facet>
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_7">
@@ -25,11 +12,12 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/alfresco-kafka-repo/src/test/resources" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="alfresco-kafka-model" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.alfresco:alfresco-repository:5.2.g" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.alfresco:alfresco-legacy-lucene:5.2.g" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.alfresco:alfresco-data-model:6.16" level="project" />

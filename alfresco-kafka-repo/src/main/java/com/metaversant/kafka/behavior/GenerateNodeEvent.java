@@ -2,7 +2,6 @@ package com.metaversant.kafka.behavior;
 
 import com.metaversant.kafka.model.NodeEvent;
 import com.metaversant.kafka.service.MessageService;
-import com.metaversant.kafka.transform.NodeRefToNodeEvent;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;

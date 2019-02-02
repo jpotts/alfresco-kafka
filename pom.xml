@@ -7,7 +7,7 @@
     <version>0.0.2-SNAPSHOT</version>
     <name>alfresco-kafka Platform Jar Module - SDK 3</name>
     <description>Platform JAR Module (to be included in the alfresco.war) - SDK 3</description>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
     <properties>
         <!-- Alfresco Maven Plugin version to use -->
@@ -176,38 +176,6 @@
                 </configuration>
             </plugin>
 
-            <!--
-                Build an AMP if 3rd party libs are needed by the extensions
-                JARs are the default artifact produced in your modules, if you want to build an amp for each module
-                you have to enable this plugin and inspect the src/main/assembly.xml file if you want to customize
-                the layout of your AMP. The end result is that Maven will produce both a JAR file and an AMP with your
-                module.
-            -->
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.6</version>
-                <executions>
-                    <execution>
-                        <id>build-amp-file</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                        <configuration>
-                            <appendAssemblyId>false</appendAssemblyId>
-                            <descriptor>src/main/assembly/amp.xml</descriptor>
-                        </configuration>
-                    </execution>
-                </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.alfresco.maven.plugin</groupId>
-                        <artifactId>alfresco-maven-plugin</artifactId>
-                        <version>${alfresco.sdk.version}</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-
             <!-- Hot reloading with JRebel -->
             <plugin>
                 <groupId>org.zeroturnaround</groupId>
@@ -280,7 +248,6 @@
                     </nonFilteredFileExtensions>
                 </configuration>
             </plugin>
-
 
             <!-- Runs the integration tests, any class that follows naming convention
                  "**/IT*.java", "**/*IT.java", and "**/*ITCase.java" will be considered an integration test -->
@@ -370,5 +337,8 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
-
+    <modules>
+        <module>alfresco-kafka-model</module>
+        <module>alfresco-kafka-repo</module>
+    </modules>
 </project>
