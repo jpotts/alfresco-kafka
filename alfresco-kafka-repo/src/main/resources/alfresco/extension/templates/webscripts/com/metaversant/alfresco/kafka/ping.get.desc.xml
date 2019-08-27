@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Alfresco Kafka Ping</shortname>
+    <description>Pings a node to cause it to get added to the stream.</description>
+    <url>/metaversant/kafka/ping?nodeRef={nodeRef}&amp;recurse={recurse}</url>
+    <family>Metaversant</family>
+    <format default="json">extension</format>
+    <authentication>admin</authentication>
+</webscript>

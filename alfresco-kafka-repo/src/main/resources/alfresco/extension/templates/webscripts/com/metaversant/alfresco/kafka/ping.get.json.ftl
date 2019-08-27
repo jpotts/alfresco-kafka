@@ -1,0 +1,3 @@
+{
+    "nodeRef": "${nodeRef}"
+}
