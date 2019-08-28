@@ -69,6 +69,41 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <dependency>
+                <groupId>${alfresco.groupId}</groupId>
+                <artifactId>share</artifactId>
+                <version>${alfresco.share.version}</version>
+                <type>war</type>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>${alfresco.groupId}</groupId>
+                <artifactId>share</artifactId>
+                <version>${alfresco.share.version}</version>
+                <classifier>classes</classifier>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>${alfresco.groupId}</groupId>
+                <artifactId>alfresco-web-framework-commons</artifactId>
+                <version>${alfresco.share.version}</version>
+                <classifier>classes</classifier>
+                <scope>provided</scope>
+            </dependency>
+            <!-- Redefine the following surf dependencies as they have no resolvable version in the
+                         alfresco-platform-distribution artifact -->
+            <dependency>
+                <groupId>org.alfresco.surf</groupId>
+                <artifactId>spring-surf</artifactId>
+                <version>${alfresco.surf.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.alfresco.surf</groupId>
+                <artifactId>spring-surf-api</artifactId>
+                <version>${alfresco.surf.version}</version>
+                <scope>provided</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -192,8 +227,39 @@
                 </plugin>
             </plugins>
         </pluginManagement>
-
+        <!-- Make sure resources in sub-projects are filtered -->
+        <resources>
+          <resource>
+            <directory>src/main/resources</directory>
+            <filtering>true</filtering>
+          </resource>
+        </resources>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.0.1</version>
+                <inherited>false</inherited>
+                <!-- Run only for the AIO parent Project -->
+                <executions>
+                  <execution>
+                    <id>copy-and-filter-test-resources</id>
+                    <phase>validate</phase>
+                    <goals>
+                      <goal>copy-resources</goal>
+                    </goals>
+                    <configuration>
+                      <outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
+                      <resources>
+                        <testResource>
+                          <directory>src/test/resources</directory>
+                          <filtering>true</filtering>
+                        </testResource>
+                      </resources>
+                    </configuration>
+                  </execution>
+                </executions>
+            </plugin>
             <!--
                 The Alfresco Maven Plugin contains all the logic to run the extension
                 in an embedded Tomcat with the H2 database.
@@ -242,10 +308,14 @@
                         -->
                         <moduleDependency>
                             <groupId>${project.groupId}</groupId>
-                            <artifactId>${project.artifactId}</artifactId>
+                            <artifactId>alfresco-kafka-repo</artifactId>
                             <version>${project.version}</version>
+                            <type>amp</type>
                         </moduleDependency>
                     </platformModules>
+                    <shareModules>
+                      <!-- Bring in custom Modules -->
+                    </shareModules>
                 </configuration>
             </plugin>
 
@@ -270,10 +340,8 @@
                         <fallback>all</fallback>
                         <resources>
                             <resource>
-                                <!--
-                                Empty resource element marks default configuration. By
-                                default it is placed first in generated configuration.
-                                -->
+                              <directory>${project.build.outputDirectory}</directory>
+                              <directory>${project.build.testOutputDirectory}</directory>
                             </resource>
                         </resources>
                     </classpath>
@@ -286,92 +354,7 @@
                     <alwaysGenerate>true</alwaysGenerate>
                 </configuration>
             </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.0.1</version>
-                <configuration>
-                    <encoding>UTF-8</encoding>
-                    <nonFilteredFileExtensions> <!-- jpg, jpeg, gif, bmp and png are added automatically -->
-                        <nonFilteredFileExtension>ftl</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>acp</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>svg</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>pdf</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>doc</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>docx</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>xls</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>xlsx</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>ppt</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>pptx</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>bin</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>lic</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>swf</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>zip</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>msg</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>jar</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>ttf</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>eot</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>woff</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>woff2</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>css</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>ico</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>psd</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>js</nonFilteredFileExtension>
-                    </nonFilteredFileExtensions>
-                </configuration>
-            </plugin>
-
-            <!-- Runs the integration tests, any class that follows naming convention
-                 "**/IT*.java", "**/*IT.java", and "**/*ITCase.java" will be considered an integration test -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.19.1</version>
-                <executions>
-                    <execution>
-                        <id>integration-test</id>
-                        <phase>integration-test</phase>
-                        <goals>
-                            <goal>integration-test</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>verify-test</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.maven.surefire</groupId>
-                        <artifactId>surefire-junit47</artifactId>
-                        <version>2.19.1</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
         </plugins>
-
-        <resources>
-            <!-- Filter the resource files in this project and do property substitutions -->
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
-        <testResources>
-            <!-- Filter the test resource files in this project and do property substitutions -->
-            <testResource>
-                <directory>src/test/resources</directory>
-                <filtering>true</filtering>
-            </testResource>
-        </testResources>
-
-
-
-
     </build>
 
     <!--
