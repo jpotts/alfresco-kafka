@@ -20,42 +20,39 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-    <bean id="${project.artifactId}_NodeTransformer" class="com.metaversant.kafka.transform.NodeRefToNodeEvent">
-        <property name="nodeService">
-            <ref bean="NodeService" />
-        </property>
-        <property name="contentService">
-            <ref bean="ContentService" />
-        </property>
-        <property name="siteService">
-            <ref bean="SiteService" />
-        </property>
+    <bean id="alfresco-kafka_NodeTransformer" class="com.metaversant.kafka.transform.NodeRefToNodeEvent">
+        <property name="nodeService"  ref="NodeService" />
+        <property name="contentService" ref="ContentService" />
+        <property name="siteService" ref="SiteService" />
     </bean>
 
-    <bean id="${project.artifactId}_MessageService" class="com.metaversant.kafka.service.MessageService">
+    <bean id="alfresco-kafka_NodePermissionsTransformer" class="com.metaversant.kafka.transform.NodeRefToNodePermissions">
+        <property name="permissionService" ref="PermissionService" />
+    </bean>
+
+    <bean id="alfresco-kafka_MessageService" class="com.metaversant.kafka.service.MessageService">
         <property name="topic" value="${kafka.topic}" />
         <property name="bootstrapServers" value="${kafka.server}" />
-        <property name="nodeTransformer">
-            <ref bean="${project.artifactId}_NodeTransformer" />
-        </property>
+        <property name="nodeTransformer" ref="alfresco-kafka_NodeTransformer" />
+        <property name="nodePermissionsTransformer" ref="alfresco-kafka_NodePermissionsTransformer"/>
     </bean>
 
-    <bean id="${project.artifactId}_GenerateNodeEvent" class="com.metaversant.kafka.behavior.GenerateNodeEvent" init-method="init">
-        <property name="nodeService">
-            <ref bean="NodeService" />
-        </property>
-        <property name="policyComponent">
-            <ref bean="policyComponent" />
-        </property>
-        <property name="messageService">
-            <ref bean="${project.artifactId}_MessageService" />
-        </property>
+    <bean id="alfresco-kafka_GenerateNodeEvent" class="com.metaversant.kafka.behavior.GenerateNodeEvent" init-method="init">
+        <property name="nodeService" ref="NodeService" />
+        <property name="policyComponent" ref="policyComponent" />
+        <property name="messageService" ref="alfresco-kafka_MessageService" />
+        <property name="nodeTransformer" ref="alfresco-kafka_NodeTransformer" />
+        <property name="nodePermissionsTransformer" ref="alfresco-kafka_NodePermissionsTransformer"/>
+    </bean>
+
+    <bean id="alfresco-kafka_GenerateNodePermissionEvent" class="com.metaversant.kafka.behavior.GenerateNodePermissionEvent" init-method="init">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="messageService" ref="alfresco-kafka_MessageService"/>
+        <property name="nodePermissionsTransformer" ref="alfresco-kafka_NodePermissionsTransformer"/>
     </bean>
 
     <bean class="com.metaversant.kafka.service.MessageServiceScopedObject" parent="baseJavaScriptExtension">
         <property name="extensionName" value="messageService" />
-        <property name="messageService">
-            <ref bean="${project.artifactId}_MessageService" />
-        </property>
+        <property name="messageService" ref="alfresco-kafka_MessageService" />
     </bean>
 </beans>

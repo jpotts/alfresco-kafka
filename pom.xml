@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.metaversant</groupId>
     <artifactId>alfresco-kafka</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.3-SNAPSHOT</version>
     <name>alfresco-kafka Platform Jar Module - SDK 3</name>
     <description>Platform JAR Module (to be included in the alfresco.war) - SDK 3</description>
     <packaging>pom</packaging>

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.metaversant.kafka.behavior.GenerateNodeEvent;
 import com.metaversant.kafka.transform.NodeRefToNodeEvent;
 import com.metaversant.kafka.model.NodeEvent;
+import com.metaversant.kafka.transform.NodeRefToNodePermissions;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -20,6 +21,7 @@ public class MessageService {
 
     // Dependencies
     NodeRefToNodeEvent nodeTransformer;
+    NodeRefToNodePermissions nodePermissionsTransformer;
 
     // Settings
     private String topic = "alfresco-node-events";
@@ -39,16 +41,11 @@ public class MessageService {
     public void ping(NodeRef nodeRef) {
         NodeEvent e = nodeTransformer.transform(nodeRef);
         e.setEventType(NodeEvent.EventType.PING);
+        e.setPermissions(nodePermissionsTransformer.transform(nodeRef));
         publish(e);
     }
 
-    public void publish(NodeRef nodeRef, NodeEvent.EventType eventType) {
-        NodeEvent e = nodeTransformer.transform(nodeRef);
-        e.setEventType(eventType);
-        publish(e);
-    }
-
-    private void publish(NodeEvent event) {
+    public void publish(NodeEvent event) {
         try {
             final String message = mapper.writeValueAsString(event);
 
@@ -85,5 +82,9 @@ public class MessageService {
 
     public void setNodeTransformer(NodeRefToNodeEvent nodeTransformer) {
         this.nodeTransformer = nodeTransformer;
+    }
+
+    public void setNodePermissionsTransformer(NodeRefToNodePermissions nodePermissionsTransformer) {
+        this.nodePermissionsTransformer = nodePermissionsTransformer;
     }
 }

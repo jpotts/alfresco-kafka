@@ -1,0 +1,41 @@
+{
+  "nodeRef": "8fe391f7-374d-4d10-aef7-9301f2c7e903",
+  "eventType": "UPDATE",
+  "path": "/{http://www.alfresco.org/model/application/1.0}company_home/{http://www.alfresco.org/model/site/1.0}sites/{http://www.alfresco.org/model/content/1.0}jtp-test-site-1/{http://www.alfresco.org/model/content/1.0}documentLibrary/{http://www.alfresco.org/model/content/1.0}testfolder2",
+  "created": 1567032687513,
+  "modified": 1567032687513,
+  "creator": "admin",
+  "modifier": "admin",
+  "contentType": "folder",
+  "siteId": "jtp-test-site-1",
+  "parent": "244a089b-17ad-4a49-81f4-c8b17b7322a6",
+  "permissions": {
+    "permissions": [
+      {
+        "authority": "GROUP_site_jtp-test-site-1_SiteConsumer",
+        "authorityType": "GROUP",
+        "permission": "SiteConsumer",
+        "inherited": true
+      },
+      {
+        "authority": "GROUP_site_jtp-test-site-1_SiteContributor",
+        "authorityType": "GROUP",
+        "permission": "SiteContributor",
+        "inherited": true
+      },
+      {
+        "authority": "GROUP_site_jtp-test-site-1_SiteCollaborator",
+        "authorityType": "GROUP",
+        "permission": "SiteCollaborator",
+        "inherited": true
+      },
+      {
+        "authority": "GROUP_site_jtp-test-site-1_SiteManager",
+        "authorityType": "GROUP",
+        "permission": "SiteManager",
+        "inherited": true
+      }
+    ],
+    "inheritanceEnabled": true
+  }
+}

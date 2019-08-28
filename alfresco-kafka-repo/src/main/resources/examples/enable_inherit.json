@@ -1,0 +1,39 @@
+{
+  "nodeRef": "2b69af4a-9b11-486b-b192-0e676b6b1c8c",
+  "eventType": "ENABLE_INHERIT",
+  "permissions": {
+    "permissions": [
+      {
+        "authority": "GROUP_site_jtp-test-site-1_SiteManager",
+        "authorityType": "GROUP",
+        "permission": "SiteManager",
+        "inherited": true
+      },
+      {
+        "authority": "GROUP_site_jtp-test-site-1_SiteConsumer",
+        "authorityType": "GROUP",
+        "permission": "SiteConsumer",
+        "inherited": true
+      },
+      {
+        "authority": "GROUP_site_jtp-test-site-1_SiteContributor",
+        "authorityType": "GROUP",
+        "permission": "SiteContributor",
+        "inherited": true
+      },
+      {
+        "authority": "GROUP_site_jtp-test-site-1_SiteManager",
+        "authorityType": "GROUP",
+        "permission": "SiteManager",
+        "inherited": false
+      },
+      {
+        "authority": "GROUP_site_jtp-test-site-1_SiteCollaborator",
+        "authorityType": "GROUP",
+        "permission": "SiteCollaborator",
+        "inherited": true
+      }
+    ],
+    "inheritanceEnabled": true
+  }
+}

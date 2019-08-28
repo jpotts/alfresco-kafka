@@ -2,6 +2,8 @@ package com.metaversant.kafka.behavior;
 
 import com.metaversant.kafka.model.NodeEvent;
 import com.metaversant.kafka.service.MessageService;
+import com.metaversant.kafka.transform.NodeRefToNodeEvent;
+import com.metaversant.kafka.transform.NodeRefToNodePermissions;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
@@ -26,8 +28,9 @@ public class GenerateNodeEvent implements
     // Dependencies
     private NodeService nodeService;
     private PolicyComponent policyComponent;
-
     private MessageService messageService;
+    private NodeRefToNodeEvent nodeTransformer;
+    private NodeRefToNodePermissions nodePermissionsTransformer;
 
     // Behaviours
     private Behaviour onCreateNode;
@@ -46,17 +49,17 @@ public class GenerateNodeEvent implements
 
         // Bind behaviours to node policies
         this.policyComponent.bindClassBehaviour(
-                QName.createQName(NamespaceService.ALFRESCO_URI, "onCreateNode"),
+                NodeServicePolicies.OnCreateNodePolicy.QNAME,
                 ContentModel.TYPE_CMOBJECT,
                 this.onCreateNode);
 
         this.policyComponent.bindClassBehaviour(
-                QName.createQName(NamespaceService.ALFRESCO_URI, "beforeDeleteNode"),
+                NodeServicePolicies.BeforeDeleteNodePolicy.QNAME,
                 ContentModel.TYPE_CMOBJECT,
                 this.beforeDeleteNode);
 
         this.policyComponent.bindClassBehaviour(
-                QName.createQName(NamespaceService.ALFRESCO_URI, "onUpdateProperties"),
+                NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
                 ContentModel.TYPE_CMOBJECT,
                 this.onUpdateProperties);
 
@@ -67,7 +70,10 @@ public class GenerateNodeEvent implements
         if (logger.isDebugEnabled()) logger.debug("Inside onCreateNode");
         NodeRef nodeRef = childAssocRef.getChildRef();
         if (nodeService.exists(nodeRef)) {
-            messageService.publish(nodeRef, NodeEvent.EventType.CREATE);
+            NodeEvent e = nodeTransformer.transform(nodeRef);
+            e.setEventType(NodeEvent.EventType.CREATE);
+            e.setPermissions(nodePermissionsTransformer.transform(nodeRef));
+            messageService.publish(e);
         }
     }
 
@@ -75,7 +81,10 @@ public class GenerateNodeEvent implements
     public void beforeDeleteNode(NodeRef nodeRef) {
         if (logger.isDebugEnabled()) logger.debug("Inside onDeleteNode");
         if (nodeService.exists(nodeRef)) {
-            messageService.publish(nodeRef, NodeEvent.EventType.DELETE);
+            NodeEvent e = nodeTransformer.transform(nodeRef);
+            e.setEventType(NodeEvent.EventType.DELETE);
+            e.setPermissions(nodePermissionsTransformer.transform(nodeRef));
+            messageService.publish(e);
         }
     }
 
@@ -83,7 +92,10 @@ public class GenerateNodeEvent implements
     public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> beforeProps, Map<QName, Serializable> afterProps) {
         if (logger.isDebugEnabled()) logger.debug("Inside onUpdateProperties");
         if (nodeService.exists(nodeRef)) {
-            messageService.publish(nodeRef, NodeEvent.EventType.UPDATE);
+            NodeEvent e = nodeTransformer.transform(nodeRef);
+            e.setEventType(NodeEvent.EventType.UPDATE);
+            e.setPermissions(nodePermissionsTransformer.transform(nodeRef));
+            messageService.publish(e);
         }
     }
 
@@ -105,5 +117,13 @@ public class GenerateNodeEvent implements
 
     public void setMessageService(MessageService messageService) {
         this.messageService = messageService;
+    }
+
+    public void setNodeTransformer(NodeRefToNodeEvent nodeTransformer) {
+        this.nodeTransformer = nodeTransformer;
+    }
+
+    public void setNodePermissionsTransformer(NodeRefToNodePermissions nodePermissionsTransformer) {
+        this.nodePermissionsTransformer = nodePermissionsTransformer;
     }
 }

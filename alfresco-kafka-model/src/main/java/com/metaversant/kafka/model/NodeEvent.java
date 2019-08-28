@@ -1,9 +1,7 @@
 package com.metaversant.kafka.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.*;
 
 import java.util.Date;
 
@@ -14,16 +12,21 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class NodeEvent {
     public enum EventType {
         CREATE,
         UPDATE,
         DELETE,
-        PING
+        PING,
+        GRANT,
+        REVOKE,
+        ENABLE_INHERIT,
+        DISABLE_INHERIT
     }
 
     private String nodeRef;
-    private EventType eventType;
+    private NodeEvent.EventType eventType;
     private String path;
     private Date created;
     private Date modified;
@@ -34,6 +37,9 @@ public class NodeEvent {
     private String siteId;
     private Long size;
     private String parent;
+    private String authority;
+    private String permission;
+    private NodePermissions permissions;
 }
 
 

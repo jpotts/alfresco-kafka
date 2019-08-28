@@ -2,7 +2,18 @@
 <module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="Spring" name="Spring">
-      <configuration />
+      <configuration>
+        <fileset id="fileset" name="Service Context" removed="false">
+          <file>file://$MODULE_DIR$/src/main/resources/alfresco/module/alfresco-kafka-repo/context/service-context.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/alfresco/module/alfresco-kafka-repo/module-context.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/alfresco/module/alfresco-kafka-repo/context/bootstrap-context.xml</file>
+          <file>jar://$MAVEN_REPOSITORY$/org/alfresco/alfresco-repository/5.2.g/alfresco-repository-5.2.g.jar!/alfresco/policy-context.xml</file>
+          <file>jar://$MAVEN_REPOSITORY$/org/alfresco/alfresco-repository/5.2.g/alfresco-repository-5.2.g.jar!/alfresco/public-services-context.xml</file>
+          <file>jar://$MAVEN_REPOSITORY$/org/alfresco/alfresco-repository/5.2.g/alfresco-repository-5.2.g.jar!/alfresco/public-services-security-context.xml</file>
+          <file>jar://$MAVEN_REPOSITORY$/org/alfresco/alfresco-repository/5.2.g/alfresco-repository-5.2.g.jar!/alfresco/script-services-context.xml</file>
+          <file>jar://$MAVEN_REPOSITORY$/org/alfresco/alfresco-repository/5.2.g/alfresco-repository-5.2.g.jar!/alfresco/site-services-context.xml</file>
+        </fileset>
+      </configuration>
     </facet>
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_7">
@@ -16,6 +27,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Maven: com.metaversant:alfresco-kafka-model:0.0.3-SNAPSHOT" level="project" />
     <orderEntry type="module" module-name="alfresco-kafka-model" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.alfresco:alfresco-repository:5.2.g" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.alfresco:alfresco-legacy-lucene:5.2.g" level="project" />
