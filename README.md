@@ -1,14 +1,18 @@
 # Alfresco Kafka Integration
 
-This is an Alfresco repository tier AMP that will publish events such as create, update, and delete to an Apache Kafka
-topic.
+This is an Alfresco repository tier AMP that will publish events to an Apache
+Kafka topic when nodes are created, updated, or deleted. Events are also
+produced for permission changes, including when inheritance is enabled and
+disabled.
 
-Events are generated using an Alfresco behavior that is bound to `onCreateNode`, `onUpdateProperties`, and `beforeDeleteNode`.
+Events are generated using an Alfresco behavior that is bound to various class
+policies such as: `onCreateNode`, `onUpdateProperties`, and `beforeDeleteNode`.
 
 ## Build
 
-This project uses the Alfresco Maven SDK to build. The output is an AMP that can be installed into your Alfresco WAR
-using the Alfresco Module Management Tool (MMT).
+This project uses the Alfresco Maven SDK to build. The output is an AMP that can
+be installed into your Alfresco WAR using the Alfresco Module Management Tool
+(MMT).
 
 ## Configure
 
@@ -31,40 +35,135 @@ type, which can be one of:
 * UPDATE
 * DELETE
 * PING
+* GRANT
+* REVOKE
+* ENABLE_INHERIT
+* DISABLE_INHERIT
 
 Here is what an event looks like:
 
     {
-	    "nodeRef": "3f375925-fa87-4e34-9734-b98bed2d483f",
-	    "eventType": "CREATE",
-	    "path": "/{http://www.alfresco.org/model/application/1.0}company_home/{http://www.alfresco.org/model/site/1.0}sites/{http://www.alfresco.org/model/content/1.0}swsdp/{http://www.alfresco.org/model/content/1.0}documentLibrary/{http://www.alfresco.org/model/content/1.0}test/{http://www.alfresco.org/model/content/1.0}test2.txt",
-        "created": 1497282061322,
-        "modified": 1497282061322,
+        "nodeRef": "70c60aea-d390-4fc7-b836-210c2778035d",
+        "eventType": "CREATE",
+        "path": "/{http://www.alfresco.org/model/application/1.0}company_home/{http://www.alfresco.org/model/site/1.0}sites/{http://www.alfresco.org/model/content/1.0}jtp-test-site-1/{http://www.alfresco.org/model/content/1.0}documentLibrary/{http://www.alfresco.org/model/content/1.0}test2.txt",
+        "created": 1567086666248,
+        "modified": 1567086666248,
         "creator": "admin",
         "modifier": "admin",
         "mimetype": "text/plain",
         "contentType": "content",
-        "siteId": "test-site-1",
-        "size": 128,
-        "parent": "06a154e3-4014-4a55-adfa-5e55040fae2d"
-	}
+        "siteId": "jtp-test-site-1",
+        "size": 4,
+        "parent": "244a089b-17ad-4a49-81f4-c8b17b7322a6",
+        "permissions": {
+            "permissions": [
+                {
+                    "authority": "GROUP_site_jtp-test-site-1_SiteConsumer",
+                    "authorityType": "GROUP",
+                    "permission": "SiteConsumer",
+                    "inherited": true
+                },
+                {
+                    "authority": "GROUP_site_jtp-test-site-1_SiteCollaborator",
+                    "authorityType": "GROUP",
+                    "permission": "SiteCollaborator",
+                    "inherited": true
+                },
+                {
+                    "authority": "GROUP_site_jtp-test-site-1_SiteContributor",
+                    "authorityType": "GROUP",
+                    "permission": "SiteContributor",
+                    "inherited": true
+                },
+                {
+                    "authority": "GROUP_site_jtp-test-site-1_SiteManager",
+                    "authorityType": "GROUP",
+                    "permission": "SiteManager",
+                    "inherited": true
+                }
+            ],
+            "inheritanceEnabled": true
+        }
+    }
 
-For folders, the size and mimetype are null.
+For folders, the size and mimetype are null and are not included in the JSON.
 
     {
-    	"nodeRef": "82f0aeae-c74e-4fd8-a55c-f6d9f40d3e1a",
-    	"eventType": "UPDATE",
-    	"path": "/{http://www.alfresco.org/model/application/1.0}company_home/{http://www.alfresco.org/model/site/1.0}sites/{http://www.alfresco.org/model/content/1.0}swsdp/{http://www.alfresco.org/model/content/1.0}documentLibrary/{http://www.alfresco.org/model/content/1.0}test/{http://www.alfresco.org/model/content/1.0}test1",
-    	"created": 1497280801902,
-    	"modified": 1497281940257,
-    	"creator": "admin",
-    	"modifier": "admin",
-    	"mimetype": null,
-    	"contentType": "folder",
-        "siteId": "test-site-1",
-    	"size": null,
-    	"parent": "06a154e3-4014-4a55-adfa-5e55040fae2d"
+        "nodeRef": "8d8396a1-b9f8-444d-b9ea-f3a1e6971285",
+        "eventType": "UPDATE",
+        "path": "/{http://www.alfresco.org/model/application/1.0}company_home/{http://www.alfresco.org/model/site/1.0}sites/{http://www.alfresco.org/model/content/1.0}jtp-test-site-1/{http://www.alfresco.org/model/content/1.0}documentLibrary/{http://www.alfresco.org/model/content/1.0}testfolder4",
+        "created": 1567086551982,
+        "modified": 1567086551982,
+        "creator": "admin",
+        "modifier": "admin",
+        "contentType": "folder",
+        "siteId": "jtp-test-site-1",
+        "parent": "244a089b-17ad-4a49-81f4-c8b17b7322a6",
+        "permissions": {
+            "permissions": [
+                {
+                    "authority": "GROUP_site_jtp-test-site-1_SiteConsumer",
+                    "authorityType": "GROUP",
+                    "permission": "SiteConsumer",
+                    "inherited": true
+                },
+                {
+                    "authority": "GROUP_site_jtp-test-site-1_SiteCollaborator",
+                    "authorityType": "GROUP",
+                    "permission": "SiteCollaborator",
+                    "inherited": true
+                },
+                {
+                    "authority": "GROUP_site_jtp-test-site-1_SiteContributor",
+                    "authorityType": "GROUP",
+                    "permission": "SiteContributor",
+                    "inherited": true
+                },
+                {
+                    "authority": "GROUP_site_jtp-test-site-1_SiteManager",
+                    "authorityType": "GROUP",
+                    "permission": "SiteManager",
+                    "inherited": true
+                }
+            ],
+            "inheritanceEnabled": true
+        }
     }
+
+Permissions-related events are smaller. For GRANT, REVOKE, ENABLE_INHERIT, and
+DISABLE_INHERIT, the event contains only the node reference and the current
+access control list:
+
+    {
+        "nodeRef": "953e16c4-d1f7-421e-bbe1-4f1123429c2a",
+        "eventType": "DISABLE_INHERIT",
+        "permissions": {
+            "permissions": [
+                {
+                    "authority": "GROUP_site_jtp-test-site-1_SiteManager",
+                    "authorityType": "GROUP",
+                    "permission": "SiteManager",
+                    "inherited": false
+                },
+                {
+                    "authority": "tuser1",
+                    "authorityType": "USER",
+                    "permission": "SiteContributor",
+                    "inherited": false
+                },
+                {
+                    "authority": "tuser3",
+                    "authorityType": "USER",
+                    "permission": "SiteContributor",
+                    "inherited": false
+                }
+            ],
+            "inheritanceEnabled": false
+        }
+    }
+
+In the example above, inheritance was turned off for a folder, which left the
+object with only locally-set permissions.
 
 ## Running Locally
 
@@ -74,3 +173,9 @@ Assuming you are running Kafka on the same machine as this project, do this:
 2. From $KAFKA_HOME, run `bin/kafka-server-start.sh config/server.properties`
 3. From this project's root directory, run `mvn clean install alfresco:run`
 4. If you want to watch the messages as they are sent to Kafka, then from $KAFKA_HOME, run `bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic alfresco-node-events --from-beginning`
+
+## Consuming Events
+
+For an example showing how to consume these events from a Spring Boot app, see
+[this project](https://github.com/jpotts/alfresco-kafka-listener-example) on
+GitHub.
