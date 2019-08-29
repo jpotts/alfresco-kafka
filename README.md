@@ -93,7 +93,7 @@ For folders, the size and mimetype are null and are not included in the JSON.
         "eventType": "UPDATE",
         "path": "/{http://www.alfresco.org/model/application/1.0}company_home/{http://www.alfresco.org/model/site/1.0}sites/{http://www.alfresco.org/model/content/1.0}jtp-test-site-1/{http://www.alfresco.org/model/content/1.0}documentLibrary/{http://www.alfresco.org/model/content/1.0}testfolder4",
         "created": 1567086551982,
-        "modified": 1567086551982,
+        "modified": 1567088364629,
         "creator": "admin",
         "modifier": "admin",
         "contentType": "folder",
@@ -108,15 +108,15 @@ For folders, the size and mimetype are null and are not included in the JSON.
                     "inherited": true
                 },
                 {
-                    "authority": "GROUP_site_jtp-test-site-1_SiteCollaborator",
-                    "authorityType": "GROUP",
-                    "permission": "SiteCollaborator",
-                    "inherited": true
-                },
-                {
                     "authority": "GROUP_site_jtp-test-site-1_SiteContributor",
                     "authorityType": "GROUP",
                     "permission": "SiteContributor",
+                    "inherited": true
+                },
+                {
+                    "authority": "GROUP_site_jtp-test-site-1_SiteCollaborator",
+                    "authorityType": "GROUP",
+                    "permission": "SiteCollaborator",
                     "inherited": true
                 },
                 {
@@ -127,7 +127,12 @@ For folders, the size and mimetype are null and are not included in the JSON.
                 }
             ],
             "inheritanceEnabled": true
-        }
+        },
+        "tags": [
+            "test1",
+            "test2",
+            "test3"
+        ]
     }
 
 Permissions-related events are smaller. For GRANT, REVOKE, ENABLE_INHERIT, and

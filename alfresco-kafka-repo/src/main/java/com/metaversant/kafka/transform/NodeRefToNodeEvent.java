@@ -7,11 +7,13 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
+import org.alfresco.service.cmr.tagging.TaggingService;
 import org.alfresco.service.namespace.QName;
 import org.apache.log4j.Logger;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import static org.alfresco.model.ContentModel.*;
@@ -26,6 +28,7 @@ public class NodeRefToNodeEvent {
     private ContentService contentService;
     private NodeService nodeService;
     private SiteService siteService;
+    private TaggingService taggingService;
 
     public NodeEvent transform(NodeRef nodeRef) {
         Map<QName, Serializable> props = nodeService.getProperties(nodeRef);
@@ -45,6 +48,10 @@ public class NodeRefToNodeEvent {
         if (siteInfo != null) {
             nodeEvent.setSiteId(siteInfo.getShortName());
         }
+
+        // Retrieve the tags from the node and add them to the event
+        List<String> tags = taggingService.getTags(nodeRef);
+        nodeEvent.setTags(tags);
 
         // If this is a content object, set the mimetype and size props
         if (props.get(PROP_CONTENT) != null) {
@@ -74,5 +81,9 @@ public class NodeRefToNodeEvent {
 
     public void setSiteService(SiteService siteService) {
         this.siteService = siteService;
+    }
+
+    public void setTaggingService(TaggingService taggingService) {
+        this.taggingService = taggingService;
     }
 }

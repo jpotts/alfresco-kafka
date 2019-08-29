@@ -24,6 +24,7 @@
         <property name="nodeService"  ref="NodeService" />
         <property name="contentService" ref="ContentService" />
         <property name="siteService" ref="SiteService" />
+        <property name="taggingService" ref="TaggingService" />
     </bean>
 
     <bean id="alfresco-kafka_NodePermissionsTransformer" class="com.metaversant.kafka.transform.NodeRefToNodePermissions">

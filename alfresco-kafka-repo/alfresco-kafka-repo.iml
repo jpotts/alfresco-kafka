@@ -12,6 +12,7 @@
           <file>jar://$MAVEN_REPOSITORY$/org/alfresco/alfresco-repository/5.2.g/alfresco-repository-5.2.g.jar!/alfresco/public-services-security-context.xml</file>
           <file>jar://$MAVEN_REPOSITORY$/org/alfresco/alfresco-repository/5.2.g/alfresco-repository-5.2.g.jar!/alfresco/script-services-context.xml</file>
           <file>jar://$MAVEN_REPOSITORY$/org/alfresco/alfresco-repository/5.2.g/alfresco-repository-5.2.g.jar!/alfresco/site-services-context.xml</file>
+          <file>jar://$MAVEN_REPOSITORY$/org/alfresco/alfresco-repository/5.2.g/alfresco-repository-5.2.g.jar!/alfresco/tagging-services-context.xml</file>
         </fileset>
       </configuration>
     </facet>

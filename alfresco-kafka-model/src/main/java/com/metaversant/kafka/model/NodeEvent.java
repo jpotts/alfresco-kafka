@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by jpotts, Metaversant on 6/9/17.
@@ -40,6 +41,7 @@ public class NodeEvent {
     private String authority;
     private String permission;
     private NodePermissions permissions;
+    private List<String> tags;
 }
 
 
