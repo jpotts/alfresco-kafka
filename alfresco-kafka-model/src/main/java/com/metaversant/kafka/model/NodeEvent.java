@@ -1,10 +1,12 @@
 package com.metaversant.kafka.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.*;
-
 import java.util.Date;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import lombok.*;
+
 
 /**
  * Created by jpotts, Metaversant on 6/9/17.
