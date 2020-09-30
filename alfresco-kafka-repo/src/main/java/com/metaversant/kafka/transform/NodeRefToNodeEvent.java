@@ -1,6 +1,16 @@
 package com.metaversant.kafka.transform;
 
-import com.metaversant.kafka.model.NodeEvent;
+import static org.alfresco.model.ContentModel.PROP_CONTENT;
+import static org.alfresco.model.ContentModel.PROP_CREATED;
+import static org.alfresco.model.ContentModel.PROP_CREATOR;
+import static org.alfresco.model.ContentModel.PROP_MODIFIED;
+import static org.alfresco.model.ContentModel.PROP_MODIFIER;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -11,12 +21,7 @@ import org.alfresco.service.cmr.tagging.TaggingService;
 import org.alfresco.service.namespace.QName;
 import org.apache.log4j.Logger;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import static org.alfresco.model.ContentModel.*;
+import com.metaversant.kafka.model.NodeEvent;
 
 /**
  * Created by jpotts, Metaversant on 6/9/17.

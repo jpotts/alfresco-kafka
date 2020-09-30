@@ -1,21 +1,23 @@
 package com.metaversant.kafka.behavior;
 
-import com.metaversant.kafka.model.NodeEvent;
-import com.metaversant.kafka.service.MessageService;
-import com.metaversant.kafka.transform.NodeRefToNodeEvent;
-import com.metaversant.kafka.transform.NodeRefToNodePermissions;
+import java.io.Serializable;
+import java.util.Map;
+
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
-import org.alfresco.service.cmr.repository.*;
-import org.alfresco.service.namespace.NamespaceService;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 import org.apache.log4j.Logger;
 
-import java.io.Serializable;
-import java.util.Map;
+import com.metaversant.kafka.model.NodeEvent;
+import com.metaversant.kafka.service.MessageService;
+import com.metaversant.kafka.transform.NodeRefToNodeEvent;
+import com.metaversant.kafka.transform.NodeRefToNodePermissions;
 
 /**
  * Created by jpotts, Metaversant on 6/9/17.
