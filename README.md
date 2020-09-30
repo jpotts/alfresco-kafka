@@ -186,8 +186,14 @@ object with only locally-set permissions.
  
  Additionally, you can use `docker ps` command to checked whether all containers are up and running correctly.
  
-2- If you want to watch the messages as they are sent to Kafka, then from $KAFKA_HOME, run `bin/kafka-console-consumer.sh --bootstrap-server localhost:9093 --topic alfresco-node-events --from-beginning`
-
+2- If you want to watch the messages as they are sent to Kafka, then from $KAFKA_HOME, run:
+  
+    `bin/kafka-console-consumer.sh --bootstrap-server localhost:9093 --topic alfresco-node-events --from-beginning`
+   
+   For windows:
+   
+    `bin\windows\kafka-console-consumer.bat --bootstrap-server localhost:9093 --topic alfresco-node-events --from-beginning`
+   
 ## Consuming Events
 
 For an example showing how to consume these events from a Spring Boot app, see
