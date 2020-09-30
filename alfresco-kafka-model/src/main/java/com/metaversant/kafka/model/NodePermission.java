@@ -1,12 +1,8 @@
 package com.metaversant.kafka.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import lombok.*;
 
 /**
  * Created by jpotts, Metaversant on 6/9/17.
