@@ -1,6 +1,7 @@
 version: '3.4'
 services:
-#  Optional
+     
+  #Optional service to launch share interface
   alfresco-kafka-repo-share:
     image: ${docker.share.image}:${alfresco.share.version}
     environment:
@@ -8,6 +9,7 @@ services:
       REPO_PORT: 8080
     ports:
       - "${share.port}:8080"
+      
   alfresco-kafka-repo-acs:
     image: alfresco-content-services-alfresco-kafka-repo:development
     build:
@@ -26,7 +28,9 @@ services:
       - alfresco-kafka-repo-acs-volume:/usr/local/tomcat/alf_data
       - ../../../../logs/alfresco:/usr/local/tomcat/logs
     depends_on:
+      - kafka
       - alfresco-kafka-repo-postgres
+      
   alfresco-kafka-repo-postgres:
     image: postgres:11.7
     environment:
@@ -38,8 +42,9 @@ services:
       - "${postgres.port}:5432"
     volumes:
       - alfresco-kafka-repo-db-volume:/var/lib/postgresql/data
+      
   alfresco-kafka-repo-ass:
-    image: alfresco/alfresco-search-services:2.0.0
+    image: alfresco/alfresco-search-services:2.0.0.1
     environment:
       #Solr needs to know how to register itself with Alfresco
       - SOLR_ALFRESCO_HOST=alfresco-kafka-repo-acs
@@ -55,13 +60,16 @@ services:
       - "8983:8983"
     volumes:
       - alfresco-kafka-repo-ass-volume:/opt/alfresco-search-services/data
-  
+   
   zookeeper:
     image: bitnami/zookeeper:3.6.2
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
     ports:
       - "2181:2181"
+    volumes:
+      - ../../../../data/alfresco-zk:/bitnami/zookeeper
+      - ../../../../data/alfresco-zk-logs:/opt/bitnami/zookeeper/logs
       
   kafka:
     image: bitnami/kafka:2.6.0   
@@ -77,6 +85,7 @@ services:
       - "9093:9093"
     volumes:
       - ../../../../data/alfresco-kafka:/bitnami/kafka
+      - ../../../../data/alfresco-kafka-logs:/opt/bitnami/kafka/logs
     depends_on:
       - zookeeper
 
