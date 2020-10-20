@@ -1,8 +1,5 @@
 package com.metaversant.kafka.behavior;
 
-import com.metaversant.kafka.model.NodeEvent;
-import com.metaversant.kafka.service.MessageService;
-import com.metaversant.kafka.transform.NodeRefToNodePermissions;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
@@ -10,6 +7,10 @@ import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.repo.security.permissions.PermissionServicePolicies;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.apache.log4j.Logger;
+
+import com.metaversant.kafka.model.NodeEvent;
+import com.metaversant.kafka.service.MessageService;
+import com.metaversant.kafka.transform.NodeRefToNodePermissions;
 
 
 /**

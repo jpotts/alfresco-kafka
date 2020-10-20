@@ -1,14 +1,15 @@
 package com.metaversant.kafka.transform;
 
-import com.metaversant.kafka.model.NodePermission;
-import com.metaversant.kafka.model.NodePermissions;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.AccessPermission;
 import org.alfresco.service.cmr.security.PermissionService;
 
-import java.util.HashSet;
-import java.util.Set;
+import com.metaversant.kafka.model.NodePermission;
+import com.metaversant.kafka.model.NodePermissions;
 
 /**
  * Created by jpotts, Metaversant on 8/28/19.

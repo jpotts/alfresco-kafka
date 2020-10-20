@@ -15,11 +15,16 @@ services:
       context: ../../../target
     environment:
       CATALINA_OPTS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0:8888"
+      JAVA_OPTS: "
+                -Dkafka.topic=alfresco-node-events
+                -Dkafka.server=kafka:9092
+                "
     ports:
       - "${acs.port}:8080"
       - "${acs.debug.port}:8888"
     volumes:
       - alfresco-kafka-repo-acs-volume:/usr/local/tomcat/alf_data
+      - ../../../../logs/alfresco:/usr/local/tomcat/logs
     depends_on:
       - alfresco-kafka-repo-postgres
   alfresco-kafka-repo-postgres:
@@ -50,6 +55,30 @@ services:
       - "8983:8983"
     volumes:
       - alfresco-kafka-repo-ass-volume:/opt/alfresco-search-services/data
+  
+  zookeeper:
+    image: bitnami/zookeeper:3.6.2
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    ports:
+      - "2181:2181"
+      
+  kafka:
+    image: bitnami/kafka:2.6.0   
+    environment:
+       KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:9092,OUTSIDE://localhost:9093
+       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+       KAFKA_LISTENERS: INSIDE://0.0.0.0:9092,OUTSIDE://0.0.0.0:9093
+       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+       ALLOW_PLAINTEXT_LISTENER: "yes"
+       KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+    ports:
+      - "9092:9092"
+      - "9093:9093"
+    volumes:
+      - ../../../../data/alfresco-kafka:/bitnami/kafka
+    depends_on:
+      - zookeeper
 
 volumes:
   alfresco-kafka-repo-acs-volume:
