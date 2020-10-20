@@ -27,17 +27,36 @@ import com.metaversant.kafka.model.NodeEvent;
  * Created by jpotts, Metaversant on 6/9/17.
  */
 public class NodeRefToNodeEvent {
-    private Logger logger = Logger.getLogger(NodeRefToNodeEvent.class);
+    
+    /** The LOGGER. */
+    private static final Logger LOGGER = Logger.getLogger(NodeRefToNodeEvent.class);
 
-    // Dependencies
+    /////////////////////  Dependencies [Start] ////////////////
+    /** The content service. */
     private ContentService contentService;
+    
+    /** The node service. */
     private NodeService nodeService;
+    
+    /** The site service. */
     private SiteService siteService;
+    
+    /** The tagging service. */
     private TaggingService taggingService;
+    /////////////////////  Dependencies [End] ////////////////
 
-    public NodeEvent transform(NodeRef nodeRef) {
-        Map<QName, Serializable> props = nodeService.getProperties(nodeRef);
-        NodeEvent nodeEvent = NodeEvent.builder()
+    /**
+     * Transform.
+     *
+     * @param nodeRef the node ref
+     * @return the node event
+     */
+    public NodeEvent transform(final NodeRef nodeRef) {
+    	if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("NodeEvent transform invoked for nodeRef: " + nodeRef);
+		}
+    	final Map<QName, Serializable> props = nodeService.getProperties(nodeRef);
+    	final NodeEvent nodeEvent = NodeEvent.builder()
                 .nodeRef(nodeRef.getId())
                 .creator((String) props.get(PROP_CREATOR))
                 .created((Date) props.get(PROP_CREATED))
@@ -49,46 +68,65 @@ public class NodeRefToNodeEvent {
                 .build();
 
         // If this node is in a site, add the site ID to the event
-        SiteInfo siteInfo = siteService.getSite(nodeRef);
-        if (siteInfo != null) {
+    	final SiteInfo siteInfo = siteService.getSite(nodeRef);
+		if (siteInfo != null) {
             nodeEvent.setSiteId(siteInfo.getShortName());
         }
 
         // Retrieve the tags from the node and add them to the event
-        List<String> tags = taggingService.getTags(nodeRef);
+		final List<String> tags = taggingService.getTags(nodeRef);
         nodeEvent.setTags(tags);
 
         // If this is a content object, set the mimetype and size props
-        if (props.get(PROP_CONTENT) != null) {
+		if (props.get(PROP_CONTENT) != null) {
             ContentReader reader = null;
             try {
                 reader = contentService.getReader(nodeRef, PROP_CONTENT);
-            } catch (Exception e) {
-                logger.error("Error reading content: " + e.getMessage());
+            } catch (Exception excp) {
+				LOGGER.error("Error reading content: " + excp.getMessage(), excp);
             }
 
-            if (reader != null) {
+			if (reader != null) {
                 nodeEvent.setMimetype(reader.getMimetype());
                 nodeEvent.setSize(reader.getContentData().getSize());
             }
         }
-
         return nodeEvent;
     }
 
-    public void setContentService(ContentService contentService) {
+    /**
+     * Sets the content service.
+     *
+     * @param contentService the new content service
+     */
+    public void setContentService(final ContentService contentService) {
         this.contentService = contentService;
     }
 
-    public void setNodeService(NodeService nodeService) {
+    /**
+     * Sets the node service.
+     *
+     * @param nodeService the new node service
+     */
+    public void setNodeService(final NodeService nodeService) {
         this.nodeService = nodeService;
     }
 
-    public void setSiteService(SiteService siteService) {
+    /**
+     * Sets the site service.
+     *
+     * @param siteService the new site service
+     */
+    public void setSiteService(final SiteService siteService) {
         this.siteService = siteService;
     }
 
-    public void setTaggingService(TaggingService taggingService) {
+    /**
+     * Sets the tagging service.
+     *
+     * @param taggingService the new tagging service
+     */
+    public void setTaggingService(final TaggingService taggingService) {
         this.taggingService = taggingService;
     }
 }

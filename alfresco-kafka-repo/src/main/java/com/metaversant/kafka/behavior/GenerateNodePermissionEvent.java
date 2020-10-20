@@ -16,27 +16,46 @@ import com.metaversant.kafka.transform.NodeRefToNodePermissions;
 /**
  * Created by jpotts, Metaversant on 8/28/19.
  */
-public class GenerateNodePermissionEvent implements
-        PermissionServicePolicies.OnGrantLocalPermission,
-        PermissionServicePolicies.OnRevokeLocalPermission,
-        PermissionServicePolicies.OnInheritPermissionsDisabled,
-        PermissionServicePolicies.OnInheritPermissionsEnabled {
+public class GenerateNodePermissionEvent
+		implements PermissionServicePolicies.OnGrantLocalPermission, PermissionServicePolicies.OnRevokeLocalPermission,
+		PermissionServicePolicies.OnInheritPermissionsDisabled, PermissionServicePolicies.OnInheritPermissionsEnabled {
+	
+    /** The LOGGER. */
+    private static final Logger LOGGER = Logger.getLogger(GenerateNodePermissionEvent.class);
 
-    // Dependencies
+    /////////////////////  Dependencies [Start] ////////////////
+    /** The policy component. */
     private PolicyComponent policyComponent;
+    
+    /** The message service. */
     private MessageService messageService;
+    
+    /** The node permissions transformer. */
     private NodeRefToNodePermissions nodePermissionsTransformer;
+    /////////////////////  Dependencies [End] //////////////////
 
-    // Behaviours
+    /////////////////////  Behaviours [Start] //////////////////
+    /** The on grant local permission. */
     private Behaviour onGrantLocalPermission;
+    
+    /** The on revoke local permission. */
     private Behaviour onRevokeLocalPermission;
+    
+    /** The on inherit permissions enabled. */
     private Behaviour onInheritPermissionsEnabled;
+    
+    /** The on inherit permissions disabled. */
     private Behaviour onInheritPermissionsDisabled;
+    /////////////////////  Behaviours [End] //////////////////
 
-    private Logger logger = Logger.getLogger(GenerateNodePermissionEvent.class);
-
+    /**
+     * Inits the.
+     */
     public void init() {
-        if (logger.isDebugEnabled()) logger.debug("Initializing GenerateNodePermissionEvent behaviors");
+    	
+        if (LOGGER.isDebugEnabled()) {
+        	LOGGER.debug("Initializing GenerateNodePermissionEvent behaviors");
+        }
 
         // Create behaviours
         this.onGrantLocalPermission = new JavaBehaviour(this, "onGrantLocalPermission", Behaviour.NotificationFrequency.EVERY_EVENT);
@@ -67,9 +86,19 @@ public class GenerateNodePermissionEvent implements
 
     }
 
+    /**
+     * On grant local permission.
+     *
+     * @param nodeRef the node ref
+     * @param authority the authority
+     * @param permission the permission
+     */
     @Override
-    public void onGrantLocalPermission(NodeRef nodeRef, String authority, String permission) {
-        NodeEvent nodeEvent = NodeEvent.builder()
+    public void onGrantLocalPermission(final NodeRef nodeRef, final String authority, final String permission) {
+    	if (LOGGER.isDebugEnabled()) {
+        	LOGGER.debug("inside onGrantLocalPermission");
+        }
+    	final NodeEvent nodeEvent = NodeEvent.builder()
                 .eventType(NodeEvent.EventType.GRANT)
                 .nodeRef(nodeRef.getId())
                 .authority(authority)
@@ -79,9 +108,19 @@ public class GenerateNodePermissionEvent implements
         messageService.publish(nodeEvent);
     }
 
+    /**
+     * On revoke local permission.
+     *
+     * @param nodeRef the node ref
+     * @param authority the authority
+     * @param permission the permission
+     */
     @Override
-    public void onRevokeLocalPermission(NodeRef nodeRef, String authority, String permission) {
-        NodeEvent nodeEvent = NodeEvent.builder()
+    public void onRevokeLocalPermission(final NodeRef nodeRef, final String authority, final String permission) {
+    	if (LOGGER.isDebugEnabled()) {
+        	LOGGER.debug("inside onRevokeLocalPermission");
+        }
+    	final NodeEvent nodeEvent = NodeEvent.builder()
                 .eventType(NodeEvent.EventType.REVOKE)
                 .nodeRef(nodeRef.getId())
                 .authority(authority)
@@ -91,10 +130,18 @@ public class GenerateNodePermissionEvent implements
         messageService.publish(nodeEvent);
     }
 
+    /**
+     * On inherit permissions disabled.
+     *
+     * @param nodeRef the node ref
+     * @param async the async
+     */
     @Override
-    public void onInheritPermissionsDisabled(NodeRef nodeRef, boolean async) {
-        logger.debug("inside onInheritPermissionsDisabled");
-        NodeEvent nodeEvent = NodeEvent.builder()
+    public void onInheritPermissionsDisabled(final NodeRef nodeRef, final boolean async) {
+        if (LOGGER.isDebugEnabled()) {
+        	LOGGER.debug("inside onInheritPermissionsDisabled");
+        }
+        final NodeEvent nodeEvent = NodeEvent.builder()
                 .eventType(NodeEvent.EventType.DISABLE_INHERIT)
                 .nodeRef(nodeRef.getId())
                 .build();
@@ -102,10 +149,17 @@ public class GenerateNodePermissionEvent implements
         messageService.publish(nodeEvent);
     }
 
+    /**
+     * On inherit permissions enabled.
+     *
+     * @param nodeRef the node ref
+     */
     @Override
-    public void onInheritPermissionsEnabled(NodeRef nodeRef) {
-        logger.debug("inside onInheritPermissionsEnabled");
-        NodeEvent nodeEvent = NodeEvent.builder()
+    public void onInheritPermissionsEnabled(final NodeRef nodeRef) {
+        if (LOGGER.isDebugEnabled()) {
+        	LOGGER.debug("inside onInheritPermissionsEnabled");
+        }
+        final NodeEvent nodeEvent = NodeEvent.builder()
                 .eventType(NodeEvent.EventType.ENABLE_INHERIT)
                 .nodeRef(nodeRef.getId())
                 .build();
@@ -113,19 +167,30 @@ public class GenerateNodePermissionEvent implements
         messageService.publish(nodeEvent);
     }
 
-    public PolicyComponent getPolicyComponent() {
-        return policyComponent;
-    }
-
-    public void setPolicyComponent(PolicyComponent policyComponent) {
+    /**
+     * Sets the policy component.
+     *
+     * @param policyComponent the new policy component
+     */
+    public void setPolicyComponent(final PolicyComponent policyComponent) {
         this.policyComponent = policyComponent;
     }
 
-    public void setMessageService(MessageService messageService) {
+    /**
+     * Sets the message service.
+     *
+     * @param messageService the new message service
+     */
+    public void setMessageService(final MessageService messageService) {
         this.messageService = messageService;
     }
 
-    public void setNodePermissionsTransformer(NodeRefToNodePermissions nodePermissionsTransformer) {
+    /**
+     * Sets the node permissions transformer.
+     *
+     * @param nodePermissionsTransformer the new node permissions transformer
+     */
+    public void setNodePermissionsTransformer(final NodeRefToNodePermissions nodePermissionsTransformer) {
         this.nodePermissionsTransformer = nodePermissionsTransformer;
     }
 }

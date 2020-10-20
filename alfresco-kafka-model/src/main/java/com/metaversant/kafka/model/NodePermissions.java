@@ -4,7 +4,10 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Created by jpotts, Metaversant on 6/9/17.
@@ -15,7 +18,11 @@ import lombok.*;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class NodePermissions {
+    
+    /** The permissions. */
     private Set<NodePermission> permissions;
+    
+    /** The is inheritance enabled. */
     private boolean isInheritanceEnabled;
 }
 
