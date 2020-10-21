@@ -4,9 +4,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.AccessPermission;
 import org.alfresco.service.cmr.security.PermissionService;
+import org.apache.log4j.Logger;
 
 import com.metaversant.kafka.model.NodePermission;
 import com.metaversant.kafka.model.NodePermissions;
@@ -15,21 +15,35 @@ import com.metaversant.kafka.model.NodePermissions;
  * Created by jpotts, Metaversant on 8/28/19.
  */
 public class NodeRefToNodePermissions {
-    // Dependencies
-    private NodeService nodeService;
+	
+	/** The LOGGER. */
+    private static final Logger LOGGER = Logger.getLogger(NodeRefToNodePermissions.class);
+    
+    /////////////////////  Dependencies [Start] ////////////////
+    /** The permission service. */
     private PermissionService permissionService;
+    /////////////////////  Dependencies [End] ////////////////
 
-    public NodePermissions transform(NodeRef nodeRef) {
+    /**
+     * Transform.
+     *
+     * @param nodeRef the node ref
+     * @return the node permissions
+     */
+    public NodePermissions transform(final NodeRef nodeRef) {
+    	if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("NodePermissions transform invoked for nodeRef: " + nodeRef);
+		}
         // determine if the node inherits its ACL from the parent
-        boolean inherits = permissionService.getInheritParentPermissions(nodeRef);
-        NodePermissions perms = new NodePermissions();
+        final boolean inherits = permissionService.getInheritParentPermissions(nodeRef);
+        final NodePermissions perms = new NodePermissions();
         perms.setInheritanceEnabled(inherits);
 
         // convert the Alfresco object into our own
-        Set<AccessPermission> permissionSet = permissionService.getAllSetPermissions(nodeRef);
-        Set<NodePermission> set = new HashSet<>();
-        for (AccessPermission perm : permissionSet) {
-            NodePermission nodePerm = NodePermission.builder()
+        final Set<AccessPermission> permissionSet = permissionService.getAllSetPermissions(nodeRef);
+        final Set<NodePermission> set = new HashSet<>();
+        for (final AccessPermission perm : permissionSet) {
+            final NodePermission nodePerm = NodePermission.builder()
                     .authority(perm.getAuthority())
                     .authorityType(perm.getAuthorityType().name())
                     .permission(perm.getPermission())
@@ -41,11 +55,12 @@ public class NodeRefToNodePermissions {
         return perms;
     }
 
-    public void setNodeService(NodeService nodeService) {
-        this.nodeService = nodeService;
-    }
-
-    public void setPermissionService(PermissionService permissionService) {
+    /**
+     * Sets the permission service.
+     *
+     * @param permissionService the new permission service
+     */
+    public void setPermissionService(final PermissionService permissionService) {
         this.permissionService = permissionService;
     }
 }
